@@ -1,0 +1,20 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname exampract2) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor mixed-fraction #f #t none #f () #t)))
+
+;;John mcarthy created the language called lisp, the predesessor to racket. This ground breaking
+;language supported reccursion. It was and has been a key tool in teaching and researching computer
+;science even until this day as noted by our use of racket in this course
+
+;;make-quad-fn: (Num Num Num -> (Num -> Num))
+(define (make-quad-fn a b c)
+  (lambda (x) (+ (* a (sqr x)) (* b x) c)))
+
+(define (key-count bst key)
+  (cond [(empty? bst) 0]
+        [(= key (node-key bst)) (+ 1 (key-count (node-left bst) key)(key-count (node-right bst key)))]
+        [else (+ (key-count (node-left bst) key)(key-count (node-right bst key)))]))
+
+
+
+

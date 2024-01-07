@@ -1,0 +1,58 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname edges) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor repeating-decimal #f #t none #f () #f)))
+
+;;
+;; ***************************************************
+;; Adam Price (21060015)
+;; CS 135 Fall 2023
+;; Assignment 10, Problem 1
+;; ***************************************************
+;;
+
+;a
+
+;;Examples
+(check-expect (adj->edge '((A (C D E)) (B (E J)) (C ()) (D (F J))
+(E (K)) (F (H)) (H ()) (J (H)) (K ())))
+              '((A C) (A D) (A E) (B E) (B J) (D F) (D J)
+(E K) (F H) (J H)))
+(check-expect (adj->edge '((A (C D E F G))))
+              '((A C) (A D) (A E) (A F) (A G)))
+ 
+;;(adj->edge adj-g) conerts ajacency list to edge list
+;;adj->edge: (listof (list Node (listof Node))) -> listof (list of Node Node) 
+(define (adj->edge adj-g)
+  (local [(define (remove-dup lst)
+            (foldr (lambda (x rror) (cond [(member? x rror) rror]
+                                          [else (cons x rror)])) empty lst))
+          (define (main-reccur adj-g)
+            (foldr (lambda (x rror)
+                       (cond [(empty? (second x)) rror]
+                             [else (foldr (lambda (y rror2)
+                                            (cons (list (first x) y) rror2))
+                                          empty (second x))])) empty adj-g))
+          (define (reccurse adj-g)  
+            (cond [(empty? adj-g) empty]
+                  [else (append (main-reccur (rest adj-g))(reccurse (rest adj-g)))]))] 
+  (remove-dup (append (main-reccur adj-g) (reccurse adj-g)))))
+
+
+;;Tests
+(check-expect (adj->edge '((A (C D E)) (B (E J)) (C ()) (D (F J))
+(E (K)) (F (K H)) (H ()) (J (H)) (K ())))
+              '((A C) (A D) (A E) (B E) (B J) (D F) (D J)
+(E K) (F K) (F H) (J H)))
+
+(check-expect (adj->edge '((A (D E)) (B (E J)) (C ()) (D (F J))
+(E (K)) (F (K H)) (H (B)) (J (H)) (K ())))
+              '((A D) (A E) (B E) (B J) (D F) (D J)
+(E K) (F K) (F H) (H B) (J H)))
+
+(check-expect (adj->edge '((A (B)) (B (C)) (C (D)) (D (E)))) '((A B) (B C) (C D) (D E)))
+
+;b
+
+
+
+

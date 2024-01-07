@@ -1,0 +1,16 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname robot) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor mixed-fraction #f #t none #f () #t)))
+;;
+;; ***************************************************
+;; Adam Price (21060015)
+;; CS 135 Fall 2023
+;; Assignment 03, Problem 3
+;; ***************************************************
+;;
+
+;;Question 3a
+
+;; A robot's State (State) is a (cons Sym (cons Nat (cons Nat empty)))
+;; requires: each Nat element in the list must be <= 10 and >= 0
+;; and the Sym is one of 'North 'South 'East 'West

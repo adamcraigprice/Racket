@@ -1,0 +1,128 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname listfun) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor mixed-fraction #f #t none #f () #t)))
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-abbr-reader.ss" "lang")((modname listfun) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor mixed-fraction #f #t none #f () #t)))
+;;Question 2a
+
+
+;;is-vowel?: Char -> Bool
+(define (is-vowel? vowel?-char)
+  (or (char=? vowel?-char #\a)  
+  (char=? vowel?-char #\i) 
+  (char=? vowel?-char #\o) 
+  (char=? vowel?-char #\e) 
+  (char=? vowel?-char #\u)
+  (char=? vowel?-char #\A)  
+  (char=? vowel?-char #\I) 
+  (char=? vowel?-char #\O) 
+  (char=? vowel?-char #\E) 
+  (char=? vowel?-char #\U)))
+
+;;count-vowels-reccursion: listof Char -> Nat
+(define (count-vowels-reccursion char-list)
+  (cond [(empty? char-list) 0]
+        [(is-vowel? (first char-list)) (+ 1 (count-vowels-reccursion (rest char-list)))]
+        [else (count-vowels-reccursion (rest char-list))]))
+
+;;Examples
+(check-expect
+(count-vowels "the quick brown fox jumped over the dog") 11)
+(check-expect (count-vowels "hElLo") 2)
+(check-expect (count-vowels "qwrtypsdfghjklzxcvbnm") 0)
+
+;;count-vowels: String -> Nat
+(define (count-vowels vowel-string)
+  (count-vowels-reccursion (string->list vowel-string)))
+
+
+;;Question 2b
+
+
+;;Examples
+(check-expect (sorted? (cons "hello" (cons "Hello" empty))) false)
+(check-expect (sorted? (cons "Hi" (cons "hellooo"
+(cons "how are youu" empty)))) true)
+(check-expect (sorted? (cons "hello" (cons "hello" (cons "hey"
+(cons "hiiii" empty))))) false)
+
+;;sorted?: listof String -> Bool
+(define (sorted? list-of-strings)
+  (cond [(empty? (rest list-of-strings)) true]
+        [(string<? (first list-of-strings)
+         (first (rest list-of-strings)))
+         (sorted? (rest list-of-strings))]
+        [else false]))
+
+
+;;Question 2c
+
+;;Examples for 2c
+
+(check-expect (replace-word "exam" "assessments"
+(cons "content" (cons "exam" (cons "assignments"
+empty))))
+(cons "content" (cons "assessment" (cons "assignments" empty))))
+
+(check-expect (replace-word "Bees" "I"
+(cons "Bees" (cons "Hate" (cons "I"
+empty))))
+(cons "I" (cons "Hate" (cons "I" empty))))
+
+;;(replace-word original-word new-word list-of-strings) replaces the original word with the new word in a list of strings 
+;;replace-word: String String listof Strings -> listof Strings
+
+(define (replace-word original-word new-word list-of-strings)
+  (cond [(empty? list-of-strings) list-of-strings]
+        [(string=? (first list-of-strings) original-word)
+         (replace-word original-word new-word (cons new-word (cons (rest list-of-strings) empty)))]
+        [else (cons (first list-of-strings)
+                    (cons (rest (replace-word original-word new-word (rest list-of-strings)))))]))
+
+
+;;Question 2d
+
+;;Examples
+(check-expect (does-occur-once (list 1 3 3) 4) false)
+(check-expect (does-occur-once (list 1 "hei" 3 'hei) 'hei) true)
+
+;;(does-occur-once list-of-any item) checks if an item occurs at least once
+;;does-occur-once: listof Any Any -> listof Any
+(define (does-occur-once list-of-any item)
+  (cond [(empty? list-of-any) false]
+        [(equal? item (first list-of-any)) true]
+        [else (does-occur-once (rest list-of-any) item)]))
+
+;;Tests
+(check-expect (does-occur-once (list 1 2 3) 2) true)
+(check-expect (does-occur-once (list 3 3 3) 3) true)
+(check-expect (does-occur-once (list 1 2 3 'hei) 'hei) true)
+(check-expect (does-occur-once (list 1 2 3) "hello") false)
+
+
+;;Examples
+(check-expect (has-occurences-left (list 5 5 5 5 5 5 1) 5) true)
+(check-expect (has-occurences-left (list 1 2 3 "hellooooo" 'wassap) 1) false)
+
+;;(has-occurences-left list-of-any item) checks if there are occurces left of an item in a list
+;;has-occurences-left: listof Any Any -> listof Any
+(define (has-occurences-left list-of-any item)
+  (cond [(empty? list-of-any) false]
+        [(equal? item (first list-of-any)) (does-occur-once (rest list-of-any) item)]
+        [else (has-occurences-left (rest list-of-any) item)]))
+
+;;Tests
+(check-expect (has-occurences-left (list 1 1 1) 1) true)
+(check-expect (has-occurences-left (list 1 2 3) 1) false)
+(check-expect (has-occurences-left (list 5 5 "hello" 1) 1) false)
+
+;;Examples 
+
+;;(remove-duplicates list-of-any) removes the duplicates in a list
+;;remove-duplicates: listof Any -> listof Any
+(define (remove-duplicates list-of-any)
+  (cond [(empty? list-of-any) list-of-any]
+        [(has-occurences-left list-of-any (first list-of-any))
+         (remove-duplicates (rest list-of-any))]
+        [else (cons (first list-of-any) (remove-duplicates (rest list-of-any)))]))

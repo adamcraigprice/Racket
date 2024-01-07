@@ -1,0 +1,18 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-intermediate-lambda-reader.ss" "lang")((modname |, goldbach|) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor mixed-fraction #f #t none #f () #t)))
+
+(define (primes p)
+  (local [(define (primes-main p incr lst)
+            (cond [(empty? lst) (primes-main p (first lst) lst)]
+                  [(= (modulo x incr) 0) (primes-main p incr (rest lst))]
+                  [else (cons (first lst) (primes-main p incr (rest lst)))]))]
+    (primes-main p 2 (reverse (rest (reverse (build-list p (lambda (x) (+ 2 x)))))))))
+
+
+
+
+
+
+
+

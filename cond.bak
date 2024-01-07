@@ -1,0 +1,25 @@
+;; The first three lines of this file were inserted by DrRacket. They record metadata
+;; about the language level of this file in a form that our tools can easily process.
+#reader(lib "htdp-beginner-reader.ss" "lang")((modname cond) (read-case-sensitive #t) (teachpacks ()) (htdp-settings #(#t constructor mixed-fraction #f #t none #f () #t)))
+;;
+;; ***************************************************
+;; Adam Price (21060015)
+;; CS 135 Fall 2023
+;; Assignment 02, Problem 2
+;; ***************************************************
+;;
+
+(define (q3a-simplified n a?)
+  (cond [a? and (>= n 0) (+ n 1)]
+        [a? (- n 1)])
+        [else 0])
+
+
+(define (q3b-simplified a? b? c?)
+  (cond
+    [a? (cond [b? 'elm]
+              [(not c?) 'birch]
+              [else 'cedar])]
+    [else (cond [b? 'pine]
+            [(not c?) 'birch]
+            [else 'cherry])]))
